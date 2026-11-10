@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" width="1280" height="400" role="img" aria-label="claude-rc-launchd: keep Claude Code Remote Control alive on your Mac">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#26283A"/><stop offset="1" stop-color="#0E0F18"/>
+    </linearGradient>
+    <linearGradient id="fg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFB86B"/><stop offset="1" stop-color="#F0603C"/>
+    </linearGradient>
+    <radialGradient id="glow" cx=".18" cy=".5" r=".6">
+      <stop offset="0" stop-color="#F0603C" stop-opacity=".28"/><stop offset="1" stop-color="#F0603C" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="400" fill="url(#bg)"/>
+  <rect width="1280" height="400" fill="url(#glow)"/>
+  <!-- decorative signal rings on the right -->
+  <g fill="none" stroke="#FFB86B" stroke-width="2" opacity=".14">
+    <circle cx="1180" cy="200" r="90"/><circle cx="1180" cy="200" r="170"/><circle cx="1180" cy="200" r="250"/><circle cx="1180" cy="200" r="330"/>
+  </g>
+  <!-- logo -->
+  <g transform="translate(96 88) scale(.4)">
+    <rect width="512" height="512" rx="112" fill="#161827"/>
+    <rect x="10" y="10" width="492" height="492" rx="104" fill="none" stroke="#FFFFFF" stroke-opacity=".1" stroke-width="4"/>
+    <path d="M132 188 L228 256 L132 324" fill="none" stroke="url(#fg)" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="198" y="340" width="86" height="34" rx="17" fill="url(#fg)"/>
+    <g fill="none" stroke="url(#fg)" stroke-width="28" stroke-linecap="round">
+      <path d="M300 214 A58 58 0 0 1 300 298" opacity=".95"/>
+      <path d="M338 176 A112 112 0 0 1 338 336" opacity=".7"/>
+      <path d="M376 138 A166 166 0 0 1 376 374" opacity=".4"/>
+    </g>
+  </g>
+  <g font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+    <text x="340" y="196" font-size="76" font-weight="700" fill="#FFFFFF" letter-spacing="-1.5">claude-rc-<tspan fill="url(#fg)">launchd</tspan></text>
+    <text x="342" y="252" font-size="30" fill="#C9CBE0">Keep Claude Code Remote Control alive on your Mac.</text>
+    <text x="342" y="302" font-size="22" fill="#8A8DAA" font-family="ui-monospace, 'SF Mono', Menlo, monospace">one command to install · one to uninstall · launchd does the rest</text>
+  </g>
+</svg>

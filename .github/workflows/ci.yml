@@ -1,0 +1,19 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax check
+        run: |
+          bash -n install.sh uninstall.sh scripts/claude-rc-server.sh test/test.sh
+      - name: ShellCheck
+        run: |
+          brew list shellcheck >/dev/null 2>&1 || brew install shellcheck
+          shellcheck -x -S warning install.sh uninstall.sh scripts/claude-rc-server.sh test/test.sh
+      - name: Smoke tests (fake claude)
+        run: bash test/test.sh
