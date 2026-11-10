@@ -23,6 +23,7 @@
 #   RC_CLAUDE_BIN  path to the claude binary      RC_WORKDIR   trusted directory to serve
 #   RC_NAME        device name shown in the app    RC_CAPACITY  max concurrent sessions
 #   RC_SPAWN       same-dir | worktree
+#   RC_KEEP_AWAKE  1 = hold `caffeinate -s` while the server runs (no system sleep on AC power)
 # Test hooks (env): RC_STATE_DIR RC_SKIP_NET RC_NET_URL RC_NET_WAIT RC_CONN_PORT RC_REG_WAIT
 #                   RC_POLL RC_HOLD RC_BACKOFF_UNIT
 
@@ -41,6 +42,7 @@ WORKDIR="${RC_WORKDIR:-$HOME}"
 NAME="${RC_NAME:-$(scutil --get ComputerName 2>/dev/null || hostname -s)}"
 CAPACITY="${RC_CAPACITY:-10}"
 SPAWN="${RC_SPAWN:-same-dir}"
+KEEP_AWAKE="${RC_KEEP_AWAKE:-0}"
 LOG="$DIR/server.log"
 OUT="$DIR/server.out"
 STARTS="$DIR/server-starts.epoch"
@@ -143,6 +145,11 @@ log "start: claude remote-control --spawn $SPAWN --capacity $CAPACITY --name '$N
 "$CLAUDE" remote-control --spawn "$SPAWN" --capacity "$CAPACITY" --name "$NAME" < /dev/null >> "$OUT" 2>&1 &
 pid=$!
 t0=$(date +%s)
+# -w: caffeinate ends by itself when the server process ends, so nothing can be left behind
+if [ "$KEEP_AWAKE" = 1 ]; then
+  caffeinate -s -w "$pid" > /dev/null 2>&1 &
+  log "keep-awake: caffeinate -s tied to server pid=$pid (only effective on AC power)"
+fi
 trap 'log "signal received; stopping server pid=$pid"; stop_server; exit 0' TERM INT HUP
 
 # 5. wait until the server holds an established connection to the API

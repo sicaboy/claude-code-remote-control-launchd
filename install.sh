@@ -1,7 +1,7 @@
 #!/bin/bash
 # claude-code-remote-control installer: keep `claude remote-control` running on this Mac via a LaunchAgent.
 #
-#   ./install.sh [install] [--workdir DIR] [--name NAME] [--capacity N] [--spawn same-dir|worktree]
+#   ./install.sh [install] [--workdir DIR] [--name NAME] [--capacity N] [--spawn same-dir|worktree] [--keep-awake]
 #   ./install.sh status
 #   ./install.sh uninstall [--keep-logs]
 #
@@ -27,7 +27,7 @@ case "${1:-}" in
   -h|--help) sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
 esac
 
-WORKDIR="" NAME="" CAPACITY="10" SPAWN="same-dir" KEEP_LOGS=0
+WORKDIR="" NAME="" CAPACITY="10" SPAWN="same-dir" KEEP_LOGS=0 KEEP_AWAKE=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --workdir)   WORKDIR="${2:-}"; shift 2 ;;
@@ -35,6 +35,7 @@ while [ $# -gt 0 ]; do
     --capacity)  CAPACITY="${2:-}"; shift 2 ;;
     --spawn)     SPAWN="${2:-}"; shift 2 ;;
     --keep-logs) KEEP_LOGS=1; shift ;;
+    --keep-awake) KEEP_AWAKE=1; shift ;;
     -h|--help)   sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) die "unknown option: $1 (try --help)" ;;
   esac
@@ -130,6 +131,7 @@ RC_WORKDIR='$WORKDIR'
 RC_NAME='$NAME'
 RC_CAPACITY='$CAPACITY'
 RC_SPAWN='$SPAWN'
+RC_KEEP_AWAKE='$KEEP_AWAKE'
 EOF
 
   # the program is the script itself, so Login Items shows "claude-code-remote-control.sh" rather than "bash"
@@ -163,6 +165,7 @@ EOF
   mv "$PLIST.new" "$PLIST"
 
   if job_loaded; then launchctl bootout "$DOMAIN/$LABEL" 2>/dev/null; wait_unloaded; fi
+  skip_lines="$(wc -l < "$STATE_DIR/server.log" 2>/dev/null || echo 0)"   # only look at log lines written from now on
   boot_err=""
   for _ in 1 2 3 4 5 6; do   # bootout can return before the old job is gone
     if boot_err="$(launchctl bootstrap "$DOMAIN" "$PLIST" 2>&1)"; then boot_err=""; break; fi
@@ -173,7 +176,7 @@ EOF
   say "Installed. Waiting for the server to register (up to 60 s)..."
   i=0
   while [ "$i" -lt 60 ]; do
-    if grep -q 'registered:' "$STATE_DIR/server.log" 2>/dev/null; then
+    if tail -n +"$((skip_lines + 1))" "$STATE_DIR/server.log" 2>/dev/null | grep -q 'registered:'; then
       say "Up: this Mac should now appear as \"$NAME\" in the Claude app's Code tab / claude.ai/code."
       say "Status: ./install.sh status   Logs: $STATE_DIR/server.log   Remove: ./install.sh uninstall"
       return 0

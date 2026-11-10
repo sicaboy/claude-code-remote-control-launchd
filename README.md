@@ -38,6 +38,7 @@ git clone https://github.com/sicaboy/claude-code-remote-control-launchd && cd cl
 | `--name NAME` | the Mac's name | Device name shown in the app |
 | `--capacity N` | `10` | Max concurrent sessions. Idle sessions keep their slot, so a full server silently ignores new ones. |
 | `--spawn MODE` | `same-dir` | `same-dir` (shared files) or `worktree` (needs a git repo) |
+| `--keep-awake` | off | Hold `caffeinate -s` while the server runs, so the Mac does not sleep on AC power. Does not change any system power setting. |
 
 Re-running `install.sh` with new options updates the installation in place.
 
@@ -78,7 +79,7 @@ Everything lives in `~/.local/share/claude-code-remote-control/`. In System Sett
 
 ## Limits and notes
 
-- **Sleep.** A sleeping Mac is not reachable. Keeping it awake (power adapter, `caffeinate -s`, Energy settings) is up to you; this tool does not change power settings.
+- **Sleep.** A sleeping Mac is not reachable. Use `--keep-awake` (it runs `caffeinate -s` only while the server runs, and only helps on AC power), or manage it yourself in Energy settings. This tool never changes system power settings. Lid-closed behaviour is not verified.
 - **Login needed after reboot.** A LaunchAgent runs inside a logged-in session; with FileVault and no auto-login, log in once after a reboot.
 - **Sign-in expiry.** Renew with `claude auth login` when it expires. The log shows the expiry date at each start.
 - **Restarts end sessions.** Restarting the server (or `install.sh` re-run, or uninstall) stops the sessions it serves. Transcripts stay on disk.
