@@ -6,11 +6,11 @@
 #   ./install.sh uninstall [--keep-logs]
 #
 # One-liner (no clone needed):
-#   curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-macos/main/install.sh | bash
-#   curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-macos/main/install.sh | bash -s -- uninstall
+#   curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-launchd/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-launchd/main/install.sh | bash -s -- uninstall
 set -u
 
-REPO="sicaboy/claude-code-remote-control-macos"
+REPO="sicaboy/claude-code-remote-control-launchd"
 REF="${CLAUDE_RC_REF:-main}"
 LABEL="io.github.sicaboy.claude-code-remote-control"
 STATE_DIR="$HOME/.local/share/claude-code-remote-control"

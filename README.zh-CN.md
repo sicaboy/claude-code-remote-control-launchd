@@ -4,11 +4,11 @@
 
 <p align="center">
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-green.svg"></a>
-  <a href="https://github.com/sicaboy/claude-code-remote-control-macos/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/sicaboy/claude-code-remote-control-macos/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/sicaboy/claude-code-remote-control-launchd/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/sicaboy/claude-code-remote-control-launchd/actions/workflows/ci.yml/badge.svg"></a>
   <img alt="Platform: macOS" src="https://img.shields.io/badge/platform-macOS-lightgrey.svg">
   <img alt="Shell: bash" src="https://img.shields.io/badge/shell-bash-4EAA25.svg">
   <img alt="Open source" src="https://img.shields.io/badge/open%20source-%E2%9D%A4-orange.svg">
-  <a href="https://github.com/sicaboy/claude-code-remote-control-macos/pulls"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
+  <a href="https://github.com/sicaboy/claude-code-remote-control-launchd/pulls"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 </p>
 
 # Claude Code Remote Control for macOS
@@ -22,13 +22,13 @@
 ## 安装（一条命令）
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-macos/main/install.sh | bash -s -- --workdir ~/projects --name "我的 Mac"
+curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-launchd/main/install.sh | bash -s -- --workdir ~/projects --name "我的 Mac"
 ```
 
 或者克隆后安装：
 
 ```bash
-git clone https://github.com/sicaboy/claude-code-remote-control-macos && cd claude-code-remote-control-macos
+git clone https://github.com/sicaboy/claude-code-remote-control-launchd && cd claude-code-remote-control-launchd
 ./install.sh --workdir ~/projects --name "我的 Mac"
 ```
 
@@ -56,7 +56,7 @@ tail -f ~/.local/share/claude-code-remote-control/server.log
 ./uninstall.sh                       # 删除任务、脚本、配置和日志
 ./uninstall.sh --keep-logs           # 保留日志
 # 没有克隆仓库时：
-curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-macos/main/install.sh | bash -s -- uninstall
+curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-launchd/main/install.sh | bash -s -- uninstall
 ```
 
 卸载会停止服务，以及它正在服务的会话。
