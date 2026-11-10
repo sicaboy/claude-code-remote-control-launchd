@@ -1,17 +1,19 @@
-<p align="center"><img src="assets/banner.svg" alt="claude-rc-launchd: keep Claude Code Remote Control alive on your Mac" width="100%"></p>
+<p align="center"><b>English</b> · <a href="README.zh-CN.md">简体中文</a></p>
+
+<p align="center"><img src="assets/banner.svg" alt="Claude Code Remote Control for macOS: always-on background service via launchd" width="100%"></p>
 
 <p align="center">
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-green.svg"></a>
-  <a href="https://github.com/sicaboy/claude-rc-launchd/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/sicaboy/claude-rc-launchd/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/sicaboy/claude-code-remote-control-macos/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/sicaboy/claude-code-remote-control-macos/actions/workflows/ci.yml/badge.svg"></a>
   <img alt="Platform: macOS" src="https://img.shields.io/badge/platform-macOS-lightgrey.svg">
   <img alt="Shell: bash" src="https://img.shields.io/badge/shell-bash-4EAA25.svg">
   <img alt="Open source" src="https://img.shields.io/badge/open%20source-%E2%9D%A4-orange.svg">
-  <a href="https://github.com/sicaboy/claude-rc-launchd/pulls"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
+  <a href="https://github.com/sicaboy/claude-code-remote-control-macos/pulls"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
 </p>
 
-# claude-rc-launchd
+# Claude Code Remote Control for macOS
 
-Run [Claude Code](https://code.claude.com) **Remote Control** as a macOS background service. Your Mac shows up as a **device card** in the Claude app's Code tab (and on claude.ai/code), so you can start new, independent sessions on it from your phone at any time, without leaving a terminal open.
+Run [Claude Code](https://code.claude.com) **Remote Control** (`claude remote-control`) as an always-on macOS background service (launchd LaunchAgent). Your Mac shows up as a **device card** in the Claude app's Code tab (and on claude.ai/code), so you can start new, independent sessions on it from your phone at any time, without leaving a terminal open.
 
 It is a small LaunchAgent plus a supervisor script. It starts at login, restarts the server when it exits, and refuses to flap.
 
@@ -20,13 +22,13 @@ It is a small LaunchAgent plus a supervisor script. It starts at login, restarts
 ## Install (one command)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-rc-launchd/main/install.sh | bash -s -- --workdir ~/projects --name "My Mac"
+curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-macos/main/install.sh | bash -s -- --workdir ~/projects --name "My Mac"
 ```
 
 or from a clone:
 
 ```bash
-git clone https://github.com/sicaboy/claude-rc-launchd && cd claude-rc-launchd
+git clone https://github.com/sicaboy/claude-code-remote-control-macos && cd claude-code-remote-control-macos
 ./install.sh --workdir ~/projects --name "My Mac"
 ```
 
@@ -45,7 +47,7 @@ Re-running `install.sh` with new options updates the installation in place.
 
 ```bash
 ./install.sh status        # job state, config, last log lines
-tail -f ~/.local/share/claude-rc-launchd/server.log
+tail -f ~/.local/share/claude-code-remote-control/server.log
 ```
 
 ## Uninstall (one command)
@@ -54,14 +56,14 @@ tail -f ~/.local/share/claude-rc-launchd/server.log
 ./uninstall.sh                       # remove job, script, config and logs
 ./uninstall.sh --keep-logs           # keep the logs
 # without a clone:
-curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-rc-launchd/main/install.sh | bash -s -- uninstall
+curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-macos/main/install.sh | bash -s -- uninstall
 ```
 
 Uninstalling stops the server and the sessions it is serving.
 
 ## What it does
 
-`~/Library/LaunchAgents/io.github.sicaboy.claude-rc-launchd.plist` runs `claude-rc-server.sh` with `RunAtLoad` and `KeepAlive`. Each cycle the script:
+`~/Library/LaunchAgents/io.github.sicaboy.claude-code-remote-control.plist` runs `claude-code-remote-control.sh` with `RunAtLoad` and `KeepAlive`. Each cycle the script:
 
 1. waits for the network (up to 2 min);
 2. checks `claude auth status`; if signed out it logs the fix and holds 5 min instead of hammering;
@@ -72,7 +74,7 @@ Uninstalling stops the server and the sessions it is serving.
 
 It scrubs inherited `CLAUDE*`, `ANTHROPIC_API_KEY` and `ANTHROPIC_AUTH_TOKEN` variables first, so it never picks up another session's identity.
 
-Everything lives in `~/.local/share/claude-rc-launchd/`. In System Settings > General > Login Items & Extensions the item appears as `claude-rc-server.sh` (not a bare `bash`).
+Everything lives in `~/.local/share/claude-code-remote-control/`. In System Settings > General > Login Items & Extensions the item appears as `claude-code-remote-control.sh` (not a bare `bash`).
 
 ## Limits and notes
 
@@ -86,16 +88,8 @@ Everything lives in `~/.local/share/claude-rc-launchd/`. In System Settings > Ge
 
 ```bash
 bash test/test.sh      # smoke tests against a fake `claude`, no network
-shellcheck -x -S warning install.sh scripts/claude-rc-server.sh test/test.sh
+shellcheck -x -S warning install.sh scripts/claude-code-remote-control.sh test/test.sh
 ```
-
-## 中文简介
-
-把 Claude Code 的 Remote Control（`claude remote-control`）做成 macOS 后台服务：登录后自动启动、退出自动重启，手机上的 Claude app「Code」页就会出现这台 Mac 的设备卡片，可随时新建独立会话。
-
-- 安装：`curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-rc-launchd/main/install.sh | bash -s -- --workdir ~/projects --name "我的 Mac"`
-- 卸载：`./uninstall.sh`，或在上面的命令后改用 `bash -s -- uninstall`
-- 前提：已 `claude auth login`；工作目录先运行一次 `claude` 并接受信任提示。
 
 ## License
 

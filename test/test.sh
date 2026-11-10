@@ -1,8 +1,8 @@
 #!/bin/bash
-# Smoke tests for scripts/claude-rc-server.sh against a fake `claude`. No network, no real Claude.
+# Smoke tests for scripts/claude-code-remote-control.sh against a fake `claude`. No network, no real Claude.
 set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SERVER="$ROOT/scripts/claude-rc-server.sh"
+SERVER="$ROOT/scripts/claude-code-remote-control.sh"
 T="$(mktemp -d)"
 trap 'kill $(jobs -p) $LISTENER 2>/dev/null; rm -rf "$T"' EXIT
 fail=0

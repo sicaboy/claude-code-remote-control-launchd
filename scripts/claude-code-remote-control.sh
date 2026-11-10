@@ -1,13 +1,13 @@
 #!/bin/bash
-# claude-rc-server.sh - run `claude remote-control` (server mode) so this Mac shows up as a device
+# claude-code-remote-control.sh - run `claude remote-control` (server mode) so this Mac shows up as a device
 # card at the top of the Claude app's Code tab and the phone / claude.ai/code can start new,
-# independent sessions here. Run by the launchd job installed by claude-rc-launchd
+# independent sessions here. Run by the launchd job installed by claude-code-remote-control
 # (RunAtLoad + KeepAlive). It runs ONE server cycle and exits when the server exits; launchd then
 # restarts it (ThrottleInterval 30 s).
 #
 # Where it shows up / how to trace it:
 #   System Settings > General > Login Items & Extensions > "Allow in the Background": an entry
-#   named after this file (claude-rc-server.sh); its magnifier button reveals this file.
+#   named after this file (claude-code-remote-control.sh); its magnifier button reveals this file.
 #   log, one line per event: <state dir>/server.log
 #
 #   no network ................ wait up to ~2 min, then exit (launchd retries)
@@ -33,7 +33,7 @@ unset ANTHROPIC_API_KEY ANTHROPIC_AUTH_TOKEN
 
 export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 umask 077
-DIR="${RC_STATE_DIR:-$HOME/.local/share/claude-rc-launchd}"
+DIR="${RC_STATE_DIR:-$HOME/.local/share/claude-code-remote-control}"
 # shellcheck disable=SC1091
 [ -f "$DIR/config.env" ] && . "$DIR/config.env"
 CLAUDE="${RC_CLAUDE_BIN:-$HOME/.local/bin/claude}"

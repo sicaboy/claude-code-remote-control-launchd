@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" width="1280" height="400" role="img" aria-label="claude-rc-launchd: keep Claude Code Remote Control alive on your Mac">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" width="1280" height="400" role="img" aria-label="Claude Code Remote Control for macOS: always-on background service via launchd">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#26283A"/><stop offset="1" stop-color="#0E0F18"/>
@@ -29,8 +29,8 @@
     </g>
   </g>
   <g font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif">
-    <text x="340" y="196" font-size="76" font-weight="700" fill="#FFFFFF" letter-spacing="-1.5">claude-rc-<tspan fill="url(#fg)">launchd</tspan></text>
-    <text x="342" y="252" font-size="30" fill="#C9CBE0">Keep Claude Code Remote Control alive on your Mac.</text>
-    <text x="342" y="302" font-size="22" fill="#8A8DAA" font-family="ui-monospace, 'SF Mono', Menlo, monospace">one command to install · one to uninstall · launchd does the rest</text>
+    <text x="340" y="186" font-size="58" font-weight="700" fill="#FFFFFF" letter-spacing="-1">Claude Code Remote Control</text>
+    <text x="340" y="252" font-size="46" font-weight="700" fill="url(#fg)" letter-spacing="-.5">for macOS</text>
+    <text x="342" y="304" font-size="24" fill="#C9CBE0">Always-on background service via launchd. One-command install.</text>
   </g>
 </svg>

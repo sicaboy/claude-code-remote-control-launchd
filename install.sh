@@ -1,21 +1,21 @@
 #!/bin/bash
-# claude-rc-launchd installer: keep `claude remote-control` running on this Mac via a LaunchAgent.
+# claude-code-remote-control installer: keep `claude remote-control` running on this Mac via a LaunchAgent.
 #
 #   ./install.sh [install] [--workdir DIR] [--name NAME] [--capacity N] [--spawn same-dir|worktree]
 #   ./install.sh status
 #   ./install.sh uninstall [--keep-logs]
 #
 # One-liner (no clone needed):
-#   curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-rc-launchd/main/install.sh | bash
-#   curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-rc-launchd/main/install.sh | bash -s -- uninstall
+#   curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-macos/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-macos/main/install.sh | bash -s -- uninstall
 set -u
 
-REPO="sicaboy/claude-rc-launchd"
+REPO="sicaboy/claude-code-remote-control-macos"
 REF="${CLAUDE_RC_REF:-main}"
-LABEL="io.github.sicaboy.claude-rc-launchd"
-STATE_DIR="$HOME/.local/share/claude-rc-launchd"
+LABEL="io.github.sicaboy.claude-code-remote-control"
+STATE_DIR="$HOME/.local/share/claude-code-remote-control"
 PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
-SERVER="$STATE_DIR/claude-rc-server.sh"
+SERVER="$STATE_DIR/claude-code-remote-control.sh"
 DOMAIN="gui/$(id -u)"
 
 say()  { printf '%s\n' "$*"; }
@@ -67,7 +67,7 @@ do_uninstall() {
     rm -f "$SERVER" "$STATE_DIR/config.env"
     say "Removed the LaunchAgent and script. Logs kept in $STATE_DIR"
   else
-    [ "$STATE_DIR" = "$HOME/.local/share/claude-rc-launchd" ] && rm -rf "$STATE_DIR"
+    [ "$STATE_DIR" = "$HOME/.local/share/claude-code-remote-control" ] && rm -rf "$STATE_DIR"
     say "Removed the LaunchAgent, script, config and logs."
   fi
   say "Any running 'claude remote-control' server was stopped; this Mac leaves the Devices list shortly."
@@ -115,10 +115,10 @@ except Exception:
   mkdir -p "$STATE_DIR" "$HOME/Library/LaunchAgents"
   chmod 700 "$STATE_DIR"
   src_dir="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" 2>/dev/null && pwd)"
-  if [ -f "$src_dir/scripts/claude-rc-server.sh" ]; then
-    cp "$src_dir/scripts/claude-rc-server.sh" "$SERVER.new"
+  if [ -f "$src_dir/scripts/claude-code-remote-control.sh" ]; then
+    cp "$src_dir/scripts/claude-code-remote-control.sh" "$SERVER.new"
   else
-    curl -fsSL "https://raw.githubusercontent.com/$REPO/$REF/scripts/claude-rc-server.sh" -o "$SERVER.new" \
+    curl -fsSL "https://raw.githubusercontent.com/$REPO/$REF/scripts/claude-code-remote-control.sh" -o "$SERVER.new" \
       || die "could not download the server script for ref '$REF'"
   fi
   head -n1 "$SERVER.new" | grep -q '^#!/bin/bash' || die "downloaded server script looks wrong; aborting"
@@ -132,7 +132,7 @@ RC_CAPACITY='$CAPACITY'
 RC_SPAWN='$SPAWN'
 EOF
 
-  # the program is the script itself, so Login Items shows "claude-rc-server.sh" rather than "bash"
+  # the program is the script itself, so Login Items shows "claude-code-remote-control.sh" rather than "bash"
   cat > "$PLIST.new" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
