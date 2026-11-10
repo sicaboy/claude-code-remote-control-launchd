@@ -1,4 +1,4 @@
-<p align="center"><b>English</b> · <a href="README.zh-CN.md">简体中文</a></p>
+<p align="center"><b>English</b> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.zh-TW.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.es.md">Español</a> · <a href="README.pt-BR.md">Português</a> · <a href="README.fr.md">Français</a> · <a href="README.de.md">Deutsch</a> · <a href="README.ru.md">Русский</a></p>
 
 <p align="center"><img src="assets/banner.svg" alt="Claude Code Remote Control for macOS: always-on background service via launchd" width="100%"></p>
 
@@ -62,7 +62,7 @@ curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-
 
 Uninstalling stops the server and the sessions it is serving.
 
-## What it does
+## How it works
 
 `~/Library/LaunchAgents/io.github.sicaboy.claude-code-remote-control.plist` runs `claude-code-remote-control.sh` with `RunAtLoad` and `KeepAlive`. Each cycle the script:
 
@@ -82,8 +82,30 @@ Everything lives in `~/.local/share/claude-code-remote-control/`. In System Sett
 - **Sleep.** A sleeping Mac is not reachable. Use `--keep-awake` (it runs `caffeinate -s` only while the server runs, and only helps on AC power), or manage it yourself in Energy settings. This tool never changes system power settings. Lid-closed behaviour is not verified.
 - **Login needed after reboot.** A LaunchAgent runs inside a logged-in session; with FileVault and no auto-login, log in once after a reboot.
 - **Sign-in expiry.** Renew with `claude auth login` when it expires. The log shows the expiry date at each start.
-- **Restarts end sessions.** Restarting the server (or `install.sh` re-run, or uninstall) stops the sessions it serves. Transcripts stay on disk.
+- **Restarts end sessions.** Restarting the server (or re-running `install.sh`, or uninstalling) stops the sessions it serves. Transcripts stay on disk.
 - It relies on `claude remote-control` behaviour in current Claude Code releases; flags may change.
+
+## FAQ
+
+### How do I keep Claude Code Remote Control running all the time on a Mac?
+
+Install this LaunchAgent. It runs `claude remote-control` in the background, starts it at login and restarts it when it exits, so your Mac stays available as a device in the Claude app.
+
+### Does `claude remote-control` keep running after I close the terminal or reboot?
+
+Not by itself: it is a foreground process and gives up after about 10 minutes without a network. Under launchd it is restarted automatically and starts at every login. After a reboot with FileVault you must log in once.
+
+### Why do new sessions from my phone get no reply?
+
+The server is probably at capacity: idle sessions keep their slot. Check `Capacity: n/N` in `server.out`, end idle sessions, or install with a higher `--capacity`.
+
+### Does the Mac have to stay awake?
+
+Yes, a sleeping Mac cannot be reached. Install with `--keep-awake` to hold `caffeinate -s` while the server runs (AC power only), or set it up in Energy settings.
+
+### How do I uninstall it?
+
+Run `./uninstall.sh`, or the curl one-liner with `uninstall`. It removes the LaunchAgent, script, config and logs.
 
 ## Development
 

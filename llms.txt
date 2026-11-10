@@ -1,0 +1,15 @@
+# Claude Code Remote Control for macOS (claude-code-remote-control-launchd)
+
+> A macOS launchd LaunchAgent that keeps Claude Code Remote Control (`claude remote-control`) running in the background, so your Mac stays available as a device card in the Claude app (Code tab) and on claude.ai/code. One-command install and uninstall. MIT licensed. Unofficial community project, not affiliated with Anthropic.
+
+Install: `curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-launchd/main/install.sh | bash -s -- --workdir ~/projects --name "My Mac"`
+Uninstall: `curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-launchd/main/install.sh | bash -s -- uninstall`
+Requirements: macOS, Claude Code signed in with a claude.ai account (`claude auth login`), a work directory trusted by Claude Code.
+
+## Docs
+- [README (English)](https://github.com/sicaboy/claude-code-remote-control-launchd/blob/main/README.md): install, options, how it works, limits, FAQ
+- [简体中文](https://github.com/sicaboy/claude-code-remote-control-launchd/blob/main/README.zh-CN.md), [繁體中文](https://github.com/sicaboy/claude-code-remote-control-launchd/blob/main/README.zh-TW.md), [日本語](https://github.com/sicaboy/claude-code-remote-control-launchd/blob/main/README.ja.md), [한국어](https://github.com/sicaboy/claude-code-remote-control-launchd/blob/main/README.ko.md), [Español](https://github.com/sicaboy/claude-code-remote-control-launchd/blob/main/README.es.md), [Português](https://github.com/sicaboy/claude-code-remote-control-launchd/blob/main/README.pt-BR.md), [Français](https://github.com/sicaboy/claude-code-remote-control-launchd/blob/main/README.fr.md), [Deutsch](https://github.com/sicaboy/claude-code-remote-control-launchd/blob/main/README.de.md), [Русский](https://github.com/sicaboy/claude-code-remote-control-launchd/blob/main/README.ru.md)
+
+## Source
+- [install.sh](https://github.com/sicaboy/claude-code-remote-control-launchd/blob/main/install.sh): installer, `status`, `uninstall`
+- [scripts/claude-code-remote-control.sh](https://github.com/sicaboy/claude-code-remote-control-launchd/blob/main/scripts/claude-code-remote-control.sh): supervisor run by launchd

@@ -1,4 +1,4 @@
-<p align="center"><a href="README.md">English</a> · <b>简体中文</b></p>
+<p align="center"><a href="README.md">English</a> · <b>简体中文</b> · <a href="README.zh-TW.md">繁體中文</a> · <a href="README.ja.md">日本語</a> · <a href="README.ko.md">한국어</a> · <a href="README.es.md">Español</a> · <a href="README.pt-BR.md">Português</a> · <a href="README.fr.md">Français</a> · <a href="README.de.md">Deutsch</a> · <a href="README.ru.md">Русский</a></p>
 
 <p align="center"><img src="assets/banner.svg" alt="Claude Code Remote Control for macOS：基于 launchd 的常驻后台服务" width="100%"></p>
 
@@ -22,14 +22,14 @@
 ## 安装（一条命令）
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-launchd/main/install.sh | bash -s -- --workdir ~/projects --name "我的 Mac"
+curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-launchd/main/install.sh | bash -s -- --workdir ~/projects --name "My Mac"
 ```
 
 或者克隆后安装：
 
 ```bash
 git clone https://github.com/sicaboy/claude-code-remote-control-launchd && cd claude-code-remote-control-launchd
-./install.sh --workdir ~/projects --name "我的 Mac"
+./install.sh --workdir ~/projects --name "My Mac"
 ```
 
 | 选项 | 默认值 | 含义 |
@@ -85,10 +85,32 @@ curl -fsSL https://raw.githubusercontent.com/sicaboy/claude-code-remote-control-
 - **重启会结束会话。**重启服务（包括重新运行 `install.sh` 或卸载）会停止它正在服务的会话，对话记录仍保留在磁盘上。
 - 它依赖当前 Claude Code 版本中 `claude remote-control` 的行为，参数以后可能变化。
 
+## 常见问题
+
+### 如何让 Claude Code Remote Control 在 Mac 上一直运行？
+
+安装这个 LaunchAgent。它在后台运行 `claude remote-control`，登录时自动启动，退出时自动重启，这台 Mac 就会一直作为设备出现在 Claude app 里。
+
+### 关闭终端或重启后，`claude remote-control` 还会继续运行吗？
+
+它本身不会：它是前台进程，断网约 10 分钟就会放弃。交给 launchd 后会自动重启，并在每次登录时启动。开了 FileVault 的 Mac 重启后需要先登录一次。
+
+### 为什么在手机上新建的会话没有回应？
+
+多半是服务已满员：空闲会话也占名额。查看 `server.out` 里的 `Capacity: n/N`，结束空闲会话，或用更大的 `--capacity` 重新安装。
+
+### Mac 必须保持唤醒吗？
+
+是的，休眠的 Mac 无法连接。用 `--keep-awake` 安装，服务运行期间会持有 `caffeinate -s`（仅限接电源），也可以自己在节能设置里处理。
+
+### 怎么卸载？
+
+运行 `./uninstall.sh`，或用 curl 一条命令加 `uninstall`。它会删除 LaunchAgent、脚本、配置和日志。
+
 ## 开发
 
 ```bash
-bash test/test.sh      # 用假的 `claude` 做冒烟测试，不联网
+bash test/test.sh      # smoke tests against a fake `claude`, no network
 shellcheck -x -S warning install.sh scripts/claude-code-remote-control.sh test/test.sh
 ```
 
